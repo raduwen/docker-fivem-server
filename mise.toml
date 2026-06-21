@@ -8,10 +8,10 @@ FX_URL=$(bun run scripts/artifact-version.ts $VERSION)
 ARTIFACT_VERSION=$(echo "$FX_URL" | sed -E 's|.*/([0-9]+)-.*|\\1|')
 if [ "$VERSION" = "latest" ]; then
   docker build --build-arg FX_URL="$FX_URL" \
-    -t raduwen/fivem-server:latest \
-    -t raduwen/fivem-server:${ARTIFACT_VERSION} .
+    -t ghcr.io/raduwen/fivem-server:latest \
+    -t ghcr.io/raduwen/fivem-server:${ARTIFACT_VERSION} .
 else
-  docker build --build-arg FX_URL="$FX_URL" -t raduwen/fivem-server:${ARTIFACT_VERSION} .
+  docker build --build-arg FX_URL="$FX_URL" -t ghcr.io/raduwen/fivem-server:${ARTIFACT_VERSION} .
 fi
 """
 
