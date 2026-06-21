@@ -1,5 +1,6 @@
-VERSION ?= 14758
-
-.PHONY: build
+.PHONY: build push
 build:
-	docker build -t raduwen/fivem-server:${VERSION} --build-arg FIVEM_VERSION=${VERSION} .
+	VERSION=$(VERSION) mise run build
+
+push:
+	VERSION=$(VERSION) mise run push

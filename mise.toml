@@ -1,0 +1,32 @@
+[tools]
+bun = "latest"
+
+[tasks.build]
+run = """
+VERSION=${VERSION:-latest}
+FX_URL=$(bun run scripts/artifact-version.ts $VERSION)
+ARTIFACT_VERSION=$(echo "$FX_URL" | sed -E 's|.*/([0-9]+)-.*|\\1|')
+if [ "$VERSION" = "latest" ]; then
+  docker build --build-arg FX_URL="$FX_URL" \
+    -t raduwen/fivem-server:latest \
+    -t raduwen/fivem-server:${ARTIFACT_VERSION} .
+else
+  docker build --build-arg FX_URL="$FX_URL" -t raduwen/fivem-server:${ARTIFACT_VERSION} .
+fi
+"""
+
+[tasks.push]
+run = """
+VERSION=${VERSION:-latest}
+if [ "$VERSION" = "latest" ]; then
+  FX_URL=$(bun run scripts/artifact-version.ts latest)
+  ARTIFACT_VERSION=$(echo "$FX_URL" | sed -E 's|.*/([0-9]+)-.*|\\1|')
+  docker tag raduwen/fivem-server:latest ghcr.io/raduwen/fivem-server:latest
+  docker tag raduwen/fivem-server:${ARTIFACT_VERSION} ghcr.io/raduwen/fivem-server:${ARTIFACT_VERSION}
+  docker push ghcr.io/raduwen/fivem-server:latest
+  docker push ghcr.io/raduwen/fivem-server:${ARTIFACT_VERSION}
+else
+  docker tag raduwen/fivem-server:${VERSION} ghcr.io/raduwen/fivem-server:${VERSION}
+  docker push ghcr.io/raduwen/fivem-server:${VERSION}
+fi
+"""
