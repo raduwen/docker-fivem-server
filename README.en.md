@@ -24,6 +24,9 @@ docker pull ghcr.io/raduwen/fivem-server:12345
 
 The version number corresponds to the build number on FiveM Artifacts.
 
+> [!WARNING]
+> Not all versions are available. Only the latest version at the time of each weekly automated build is provided.
+
 ## Image Updates
 
 The image is automatically built and pushed every Monday with the latest FiveM artifact.
